@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Darkrd3256*'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'calendario_flask'
 mysql = MySQL(app)
 
@@ -106,6 +106,7 @@ def agregar_estudiantes():
         telefono_estudiante = request.form['telefono_estudiante']
         email_estudiante = request.form['email_estudiante']
         semestre_estudiante = request.form['semestre_estudiante']
+        
         cur = mysql.connection.cursor()
         try:
             cur.execute(
@@ -113,8 +114,9 @@ def agregar_estudiantes():
                 (identificacion_estudiante, nombres_estudiante, apellidos_estudiante, telefono_estudiante, email_estudiante, semestre_estudiante))
             mysql.connection.commit()
             flash('estudiante agregado satisfactoriamente')
-        except:
+        except IOError as e:
             flash('La identificacion o el correo del estudiante ya existen')
+            print(e)
     return redirect(url_for('estudiantes'))
 
 
